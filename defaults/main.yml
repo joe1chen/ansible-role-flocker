@@ -1,0 +1,40 @@
+---
+
+# we have to configure the control service node and agent nodes
+# differently.  To accomplish this we choose what to import based on
+# the host's inventory group name.  Change these variables based what
+# you have named the groups for these servers i your on your
+# inventory/hosts file.
+flocker_control_service_groupname: flocker_control_service
+flocker_agents_groupname: flocker_agents
+flocker_control_service_port: 4524
+
+# you must provide the absolute path to your flocker agent.yml file.
+flocker_agent_yml_path: ""
+
+flocker_cluster_name: mycluster
+# Warning: this folder will be deleted everytime the playbook is run
+flocker_local_tempdir: /tmp/{{ flocker_cluster_name }}
+flocker_api_cert_name: api_user
+flocker_install_docker_plugin: true
+
+
+# flocker_control_service_address:
+
+# flocker_dataset_backend: not_set
+# # AWS Credentials
+# flocker_aws_region: not_set
+# flocker_aws_zone: not_set
+# flocker_aws_access_key_id: not_set
+# flocker_aws_secret_access_key: not_set
+# # Rackspace Credentials
+# flocker_rackspace_region: not_set
+# flocker_rackspace_auth_plugin: "rackspace"
+# flocker_rackspace_username: not_set
+# flocker_rackspace_api_key: not_set
+# flocker_rackspace_auth_url: "https://identity.api.rackspacecloud.com/v2.0"
+# # gce credentials
+# flocker_gce_project: not_set
+# flocker_gce_zone: not_set
+# # Loopback credentials
+# flocker_loopback_root_path: /var/lib/flocker/loopback

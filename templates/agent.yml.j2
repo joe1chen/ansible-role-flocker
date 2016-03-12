@@ -1,0 +1,26 @@
+"version": 1
+"control-service":
+   "hostname": "{{flocker_control_service_address |default({{ flocker_control_service[0] }}) }}"
+   "port": {{ flocker_control_service_port }}
+
+# The dataset key below selects and configures a dataset backend (see below: aws/openstack/etc).
+dataset:
+   backend: "{{ flocker_dataset_backend }}"
+
+{% if flocker_dataset_backend == 'aws' %}
+   region: "{{ flocker_aws_region }}"
+   zone: "{{ flocker_aws_zone }}"
+   access_key_id: "{{ flocker_aws_access_key_id }}"
+   secret_access_key: "{{ flocker_aws_secret_access_key }}"
+{% elif flocker_dataset_backend == 'openstack' %}
+   region: "{{ flocker_rackspace_region }}"
+   auth_plugin: "{{ flocker_rackspace_auth_plugin }}"
+   username: "{{ flocker_rackspace_username }}"
+   api_key: "{{ flocker_rackspace_api_key }}"
+   auth_url: "{{ flocker_rackspace_auth_url }}"
+{% elif flocker_dataset_backend == 'loopback' %}
+   project: "{{ flocker_gce_project }}"
+   zone: "{{ flocker_gce_zone }}"
+{% elif flocker_dataset_backend == 'loopback' %}
+   root_path: "{{ flocker_loopback_root_path }}"
+{% endif %}

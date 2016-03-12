@@ -1,0 +1,8 @@
+"version": 1
+"control-service":
+   "hostname": ec2-52-36-216-145.us-west-2.compute.amazonaws.com
+   "port": 4524
+   
+"dataset":
+   "backend": "loopback"
+   "root_path": "/var/lib/flocker/loopback"

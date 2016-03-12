@@ -1,0 +1,10 @@
+[flocker_control_service]
+localhost
+
+[flocker_agents]
+localhost
+
+[nodes:children]
+flocker_control_service
+flocker_agents
+
