@@ -11,6 +11,17 @@
 - name: "Assert that the user has set flocker_agent_yml_path"
   assert: { that: "flocker_agent_yml_path != '' "  }
 
+- name: See if flocker-ca is installed on the host system
+  command: which flocker-ca
+  register: flocker_ca_output
+  ignore_errors: True
+  delegate_to: 127.0.0.1
+
+- name: Fail when flocker-ca is not installed on this system
+  fail: msg="you must install flocker on the ansible host system. See https\://docs.clusterhq.com/en/latest/flocker-standalone/install-client.html"
+  when: "flocker_ca_output.rc != 0"
+  delegate_to: 127.0.0.1
+  
 - name: Stat flocker_agent_yml_path
   stat: path={{ flocker_agent_yml_path }}
   register: agent_path_test
