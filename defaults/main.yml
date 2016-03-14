@@ -3,8 +3,7 @@
 # we have to configure the control service node and agent nodes
 # differently.  To accomplish this we choose what to import based on
 # the host's inventory group name.  Change these variables based what
-# you have named the groups for these servers i your on your
-# inventory/hosts file.
+# you have named the inventory groups for these servers.
 flocker_control_service_groupname: flocker_control_service
 flocker_agents_groupname: flocker_agents
 
