@@ -1,8 +1,8 @@
 [flocker_control_service]
-localhost
+127.0.0.1
 
 [flocker_agents]
-localhost
+127.0.0.1
 
 [nodes:children]
 flocker_control_service

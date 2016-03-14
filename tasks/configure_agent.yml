@@ -49,7 +49,7 @@
   sudo: yes
   notify:
     - restart flocker-dataset-agent
-    #- restart flocker-container-agent
+    - restart flocker-container-agent
 
 - name: copy the key to the correct agent node
   copy:
@@ -60,4 +60,4 @@
   sudo: yes
   notify:
     - restart flocker-dataset-agent
-    #- restart flocker-container-agent
+    - restart flocker-container-agent
