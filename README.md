@@ -43,8 +43,9 @@ Set to True to install the Flocker Plugin for Docker.
 
     ---
     - hosts: nodes
+      user: ubuntu
       roles:
-        - role: flocker
+        - role: ansible-role-flocker
 
 ## Example Invocation
 

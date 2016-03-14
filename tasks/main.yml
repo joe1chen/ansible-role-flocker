@@ -34,7 +34,6 @@
     that:
       - agent_path_test.stat.exists
 
-################################################################################
 - include: debian_install.yml
   when: ansible_os_family == 'Debian'
 
@@ -64,7 +63,7 @@
   when: "'{{ flocker_agents_groupname }}' in group_names"
 
 - include: debian_firewall.yml
-  when: ansible_os_family == 'Debian'
+  when: "'{{ flocker_control_service_groupname }}' in group_names and ansible_os_family == 'Debian'"
 
 - include: centos_firewall.yml
-  when: ansible_os_family == 'RedHat'
+  when: "'{{ flocker_control_service_groupname }}' in group_names and ansible_os_family == 'RedHat'"

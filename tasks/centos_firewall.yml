@@ -8,7 +8,29 @@
 
 - name: determine if firewalld is running
   command: "firewall-cmd --state"
+  sudo: yes
   register: firewalld_running
+  when: has_firewalld.rc == 0
+  ignore_errors: true
+  tags:
+    - firewall
+
+- name: reload firewall
+  command: "firewall-cmd --reload"
+  sudo: yes
+  when: (has_firewalld.rc == 0) and (firewalld_running.stdout == "running")
+  tags:
+    - firewall
+
+- name: add flocker-control-api
+  command: "firewall-cmd --permanent --add-service flocker-control-api"
+  sudo: yes
+  when: (has_firewalld.rc == 0) and (firewalld_running.stdout == "running")
+  tags:
+    - firewall
+
+- command: "firewall-cmd --add-service flocker-control-api"
+  sudo: yes
   when: (has_firewalld.rc == 0) and (firewalld_running.stdout == "running")
   tags:
     - firewall
@@ -19,33 +41,13 @@
   when: (has_firewalld.rc == 0) and (firewalld_running.stdout == "running")
   tags:
     - firewall
-    
-- name: add flocker-control-api 
-  command: "firewall-cmd --permanent --add-service flocker-control-api"
-  sudo: yes
-  when: (has_firewalld.rc == 0) and (firewalld_running.stdout == "running")
-  tags:
-    - firewall
-  
-- command: "firewall-cmd --add-service flocker-control-api"
-  sudo: yes
-  when: (has_firewalld.rc == 0) and (firewalld_running.stdout == "running")
-  tags:
-    - firewall
-    
-- name: reload firewall
-  command: "firewall-cmd --reload"
-  sudo: yes
-  when: (has_firewalld.rc == 0) and (firewalld_running.stdout == "running")
-  tags:
-    - firewall
-  
+
 - command: "firewall-cmd --permanent --add-service flocker-control-agent"
   sudo: yes
   when: (has_firewalld.rc == 0) and (firewalld_running.stdout == "running")
   tags:
     - firewall
-  
+
 - command: "firewall-cmd --add-service flocker-control-agent"
   sudo: yes
   when: (has_firewalld.rc == 0) and (firewalld_running.stdout == "running")

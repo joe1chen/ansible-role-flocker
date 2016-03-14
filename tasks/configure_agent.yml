@@ -22,13 +22,6 @@
   sudo: yes
   when: not (flocker_agent_yml_path is undefined or flocker_agent_yml_path is none or flocker_agent_yml_path | trim == '')
 
-# - name: create agent.yml on the node
-#   template: src=agent.yml.j2 dest=/etc/flocker/agent.yml owner=root
-#   sudo: yes
-#   when: not (flocker_agent_yml_path is undefined or flocker_agent_yml_path is none or flocker_agent_yml_path | trim == '')
-
-  #{{ flocker_agent_yml_path |default("") != "" and flocker_agent_path|default(None) != None }}
-
 - name: create the node certs on the local machine
   shell: "flocker-ca create-node-certificate --outputpath={{ flocker_local_tempdir }}/{{ inventory_hostname }}/"
   args:
