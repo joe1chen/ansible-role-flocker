@@ -45,11 +45,11 @@ Set to True to install the Flocker Plugin for Docker.
     - hosts: nodes
       user: ubuntu
       roles:
-        - role: ansible-role-flocker
+        - role: ClusterHQ.flocker
 
 ## Example Invocation
 
-    ansible-playbook -i inventory/hosts tests/flocker.yml  --extra-vars "flocker_agent_yml_path=/home/user/config_files/agent.yml"
+    ansible-playbook -i inventory/hosts flocker_example_playbook.yml  --extra-vars "flocker_agent_yml_path=/home/user/config_files/agent.yml"
 
 ## Example Inventory
 
