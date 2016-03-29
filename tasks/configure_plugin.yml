@@ -1,0 +1,40 @@
+---
+- name: remove old /tmp/<clustername>-plugins/<node>
+  command: rm -rf "{{ flocker_local_tempdir }}-plugins/{{ inventory_hostname }}"
+  delegate_to: 127.0.0.1
+
+- name: create the directories to hold the plugin certs
+  file:
+    path: "{{ flocker_local_tempdir }}-plugins/{{ inventory_hostname }}"
+    state: directory
+  delegate_to: 127.0.0.1
+
+- name: remove old certs
+  file: path="/etc/flocker/{{ item }}" state=absent
+  with_items:
+    - plugin.crt
+    - plugin.key
+  sudo: yes
+
+- name: create the plugin certs on the local machine
+  shell: "flocker-ca create-api-certificate plugin --outputpath={{ flocker_local_tempdir }}-plugins/{{ inventory_hostname }}/"
+  args:
+    chdir: "{{ flocker_local_tempdir }}-plugins"
+  delegate_to: 127.0.0.1
+
+- name: copy the plugin cert to the correct agent node
+  copy:
+    src: "{{ item }}"
+    dest: /etc/flocker/plugin.crt
+  with_fileglob: "{{ flocker_local_tempdir }}-plugins/{{ inventory_hostname }}/plugin.crt"
+  sudo: yes
+
+- name: copy the plugin key to the correct agent node
+  copy:
+    src: "{{ item }}"
+    dest: /etc/flocker/plugin.key
+    mode: 0600
+  with_fileglob: "{{ flocker_local_tempdir }}-plugins/{{ inventory_hostname }}/plugin.key"
+  sudo: yes
+  notify:
+    - restart flocker-docker-plugin

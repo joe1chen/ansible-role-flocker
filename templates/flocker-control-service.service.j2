@@ -1,0 +1,17 @@
+[Unit]
+Description=Flocker Control Service
+Requires=docker.service
+After=docker.service
+
+[Service]
+ExecStartPre=-/usr/bin/docker stop -t 15 flocker-control-service
+ExecStartPre=-/usr/bin/docker rm -f flocker-control-service
+ExecStartPre=-/usr/bin/docker rm -f flocker-control-volume
+ExecStartPre=-/usr/bin/docker run --name=flocker-control-volume -v /var/lib/flocker clusterhq/flocker-control-service true
+ExecStart=/usr/bin/docker run -d --name=flocker-control-service --net=host -v /etc/flocker:/etc/flocker --volumes-from=flocker-control-volume clusterhq/flocker-control-service
+ExecStop=/usr/bin/docker stop flocker-control-service
+TimeoutStartSec=0
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

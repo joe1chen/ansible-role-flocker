@@ -5,7 +5,7 @@
 # host machine.
 
 - name: "Assert that we are on a supported platform"
-  assert: { that: "ansible_os_family | match('Debian') or ansible_os_family | match('RedHat')" }
+  assert: { that: "ansible_os_family | match('Debian') or ansible_os_family | match('RedHat') or ansible_os_family | match('CoreOS')" }
 
 - name: "Assert that host groups are named correctly. If this fails, update *_groupnames from defaults/main.yml"
   assert: { that: "'{{ flocker_control_service_groupname }}' in group_names or '{{ flocker_agents_groupname }}' in group_names" }
@@ -39,6 +39,9 @@
 
 - include: centos_install.yml
   when: ansible_os_family == 'RedHat'
+
+- include: coreos_install.yml
+  when: ansible_os_family == 'CoreOS'
 
 - name: remove old /tmp/<clustername>
   command: rm -rf "{{ flocker_local_tempdir }}"

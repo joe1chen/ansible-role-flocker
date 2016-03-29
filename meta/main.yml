@@ -12,6 +12,9 @@ galaxy_info:
     - name: Ubuntu
       versions:
         - trusty
+    - name: CoreOS
+      versions:
+        - all
   galaxy_tags:
     - flocker
     - installer

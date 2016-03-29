@@ -1,0 +1,15 @@
+[Unit]
+Description=Flocker Container Agent
+Requires=docker.service
+After=docker.service
+
+[Service]
+ExecStartPre=-/usr/bin/docker stop -t 15 flocker-container-agent
+ExecStartPre=-/usr/bin/docker rm -f flocker-container-agent
+ExecStart=/usr/bin/docker run -d --privileged=true --name flocker-container-agent --net=host -v /etc/flocker:/etc/flocker -v /var/run/docker.sock:/var/run/docker.sock clusterhq/flocker-container-agent
+ExecStop=/usr/bin/docker stop flocker-container-agent
+TimeoutStartSec=0
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

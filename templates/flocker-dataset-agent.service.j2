@@ -1,0 +1,15 @@
+[Unit]
+Description=Flocker Dataset Agent
+Requires=docker.service
+After=docker.service
+
+[Service]
+ExecStartPre=-/usr/bin/docker stop -t 15 flocker-dataset-agent
+ExecStartPre=-/usr/bin/docker rm -f flocker-dataset-agent
+ExecStart=/usr/bin/docker run -d --privileged=true --name flocker-dataset-agent --net=host -v /tmp/flocker-command-log:/tmp/flocker-command-log -v /flocker:/flocker -v /:/host -v /etc/flocker:/etc/flocker -v /dev:/dev clusterhq/flocker-dataset-agent
+ExecStop=/usr/bin/docker stop flocker-dataset-agent
+TimeoutStartSec=0
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

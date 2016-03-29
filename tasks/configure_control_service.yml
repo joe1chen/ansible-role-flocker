@@ -1,5 +1,5 @@
 ---
-- assert: { that: "ansible_os_family | match('Debian') or ansible_os_family | match('RedHat')" }
+- assert: { that: "ansible_os_family | match('Debian') or ansible_os_family | match('RedHat') or ansible_os_family | match('CoreOS')" }
 
 - name: create /tmp/<clustername>
   file:
@@ -63,16 +63,19 @@
     dest: /etc/services
     line: 'flocker-control-api	4523/tcp	# Flocker Control API port'
   sudo: yes
+  when: ansible_os_family == 'Debian' or ansible_os_family == 'RedHat'
 
 - name: Flocker Control Agent port
   lineinfile:
     dest: /etc/services
     line: 'flocker-control-agent	4524/tcp	# Flocker Control Agent port'
   sudo: yes
+  when: ansible_os_family == 'Debian' or ansible_os_family == 'RedHat'
 
 - name: setup flocker-control runlevels
   copy: src=flocker-control.override dest=/etc/init/flocker-control.override
   sudo: yes
+  when: ansible_os_family == 'Debian' or ansible_os_family == 'RedHat'
 
 - include: debian_firewall.yml
   when: ansible_os_family == 'Debian'
