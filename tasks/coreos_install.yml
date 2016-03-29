@@ -49,6 +49,9 @@
   delegate_to: 127.0.0.1
   when: "flocker_install_docker_plugin and '{{ flocker_agents_groupname }}' in group_names"
 
+- include: configure_flocker_docker_plugin.yml
+  when: "flocker_install_docker_plugin and '{{ flocker_agents_groupname }}' in group_names"
+
 - name: install flocker-docker-plugin
   sudo: yes
   template:
@@ -56,5 +59,3 @@
     dest: /etc/systemd/flocker-docker-plugin.service
   when: "flocker_install_docker_plugin and '{{ flocker_agents_groupname }}' in group_names"
 
-- include: configure_plugin.yml
-  when: "flocker_install_docker_plugin and '{{ flocker_agents_groupname }}' in group_names"

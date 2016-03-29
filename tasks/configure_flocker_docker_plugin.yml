@@ -36,5 +36,3 @@
     mode: 0600
   with_fileglob: "{{ flocker_local_tempdir }}-plugins/{{ inventory_hostname }}/plugin.key"
   sudo: yes
-  notify:
-    - restart flocker-docker-plugin
