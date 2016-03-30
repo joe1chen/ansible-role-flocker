@@ -1,4 +1,8 @@
 ---
+- name: reload systemd
+  sudo: True
+  command: systemctl daemon-reload
+
 - name: restart flocker-control
   service: name=flocker-control state=restarted
   sudo: True
@@ -9,4 +13,8 @@
 
 - name: restart flocker-container-agent
   service: name=flocker-container-agent state=restarted
+  sudo: yes
+
+- name: restart flocker-docker-plugin
+  service: name=flocker-docker-plugin state=restarted
   sudo: yes

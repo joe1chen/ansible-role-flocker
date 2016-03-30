@@ -4,6 +4,9 @@
   template:
     src: flocker-container-agent.service.j2
     dest: /etc/systemd/flocker-container-agent.service
+  notify:
+    - reload systemd
+    - restart flocker-container-agent
   when: "'{{ flocker_agents_groupname }}' in group_names"
 
 - name: install flocker-dataset-agent
@@ -11,13 +14,19 @@
   template:
     src: flocker-dataset-agent.service.j2
     dest: /etc/systemd/flocker-dataset-agent.service
+  notify:
+    - reload systemd
+    - restart flocker-dataset-agent
   when: "'{{ flocker_agents_groupname }}' in group_names"
 
-- name: install flocker-control-service
+- name: install flocker-control
   sudo: yes
   template:
-    src: flocker-control-service.service.j2
-    dest: /etc/systemd/flocker-control-service.service
+    src: flocker-control.service.j2
+    dest: /etc/systemd/flocker-control.service
+  notify:
+    - reload systemd
+    - restart flocker-control
   when: "'{{ flocker_control_service_groupname }}' in group_names"
   run_once: true
 
@@ -36,5 +45,8 @@
   template:
     src: flocker-docker-plugin.service.j2
     dest: /etc/systemd/flocker-docker-plugin.service
+  notify:
+    - reload systemd
+    - restart flocker-docker-plugin
   when: "flocker_install_docker_plugin and '{{ flocker_agents_groupname }}' in group_names"
 
