@@ -4,12 +4,13 @@ Requires=docker.service
 After=docker.service
 
 [Service]
-ExecStartPre=-/usr/bin/docker stop -t 15 flocker-docker-plugin
-ExecStartPre=-/usr/bin/docker rm -f flocker-docker-plugin
-ExecStart=/usr/bin/docker run -d --privileged=true --name flocker-docker-plugin --net=host -e FLOCKER_CONTROL_SERVICE_BASE_URL=https://{{ hostvars[groups[flocker_control_service_groupname][0]].ansible_default_ipv4.address }}:4523/v1 -e MY_NETWORK_IDENTITY={{ ansible_default_ipv4.address }} -v /etc/flocker:/etc/flocker -v /run/docker:/run/docker clusterhq/flocker-docker-plugin
+ExecStartPre=-/usr/bin/docker kill flocker-docker-plugin
+ExecStartPre=-/usr/bin/docker rm flocker-docker-plugin
+ExecStartPre=/usr/bin/docker pull clusterhq/flocker-docker-plugin
+ExecStart=/usr/bin/docker run --privileged=true --name flocker-docker-plugin --net=host -e FLOCKER_CONTROL_SERVICE_BASE_URL=https://{{ hostvars[groups[flocker_control_service_groupname][0]].ansible_default_ipv4.address }}:4523/v1 -e MY_NETWORK_IDENTITY={{ ansible_default_ipv4.address }} -v /etc/flocker:/etc/flocker -v /run/docker:/run/docker clusterhq/flocker-docker-plugin
 ExecStop=/usr/bin/docker stop flocker-docker-plugin
-TimeoutStartSec=0
 Restart=on-failure
+TimeoutStartSec=0
 
 [Install]
 WantedBy=multi-user.target

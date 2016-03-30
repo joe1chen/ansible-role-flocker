@@ -1,20 +1,4 @@
 ---
-- name: pull flocker-container-agent
-  command: docker pull clusterhq/flocker-container-agent
-  sudo: yes
-  when: "'{{ flocker_agents_groupname }}' in group_names"
-
-- name: pull flocker-dataset-agent
-  command: docker pull clusterhq/flocker-dataset-agent
-  sudo: yes
-  when: "'{{ flocker_agents_groupname }}' in group_names"
-
-- name: pull flocker-control-service
-  command: docker pull clusterhq/flocker-control-service
-  sudo: yes
-  when: "'{{ flocker_control_service_groupname }}' in group_names"
-  run_once: true
-
 - name: install flocker-container-agent
   sudo: yes
   template:
@@ -36,11 +20,6 @@
     dest: /etc/systemd/flocker-control-service.service
   when: "'{{ flocker_control_service_groupname }}' in group_names"
   run_once: true
-
-- name: pull flocker-docker-plugin
-  command: docker pull clusterhq/flocker-docker-plugin
-  sudo: yes
-  when: "flocker_install_docker_plugin and '{{ flocker_agents_groupname }}' in group_names"
 
 - name: create docker plugins dir
   file:
