@@ -1,6 +1,6 @@
 ---
 - name: remove old certs
-  command: rm /etc/flocker/plugin.*
+  command: rm -f /etc/flocker/plugin.*
   sudo: yes
 
 - name: create the plugin certs on the local machine
