@@ -38,9 +38,6 @@
     recurse: yes
   when: "flocker_install_docker_plugin and '{{ flocker_agents_groupname }}' in group_names"
 
-- include: configure_flocker_docker_plugin.yml
-  when: "flocker_install_docker_plugin and '{{ flocker_agents_groupname }}' in group_names"
-
 - name: install flocker-docker-plugin
   sudo: yes
   template:
