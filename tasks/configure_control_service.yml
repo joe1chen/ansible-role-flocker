@@ -1,7 +1,7 @@
 ---
 - assert: { that: "ansible_os_family | match('Debian') or ansible_os_family | match('RedHat') or ansible_os_family | match('CoreOS')" }
 
-- name: create /tmp/<clustername>
+- name: "create /tmp/{{ flocker_cluster_name }}"
   file:
     path: "{{ flocker_local_tempdir }}"
     state: directory
