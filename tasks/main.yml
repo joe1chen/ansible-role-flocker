@@ -21,18 +21,6 @@
   when: "flocker_ca_output.rc != 0"
   delegate_to: 127.0.0.1
   
-- name: "Stat flocker_agent_yml_path"
-  stat: path={{ flocker_agent_yml_path }}
-  register: agent_path_test
-  delegate_to: 127.0.0.1
-  when: (flocker_agent_backend is undefined or flocker_agent_backend is none or flocker_agent_backend | trim == '')
-
-- name: "Assert that flocker_agent_yml_filepath exists"
-  assert:
-    that:
-      - agent_path_test.stat.exists
-  when: (flocker_agent_backend is undefined or flocker_agent_backend is none or flocker_agent_backend | trim == '')
-
 - include: debian_install.yml
   when: ansible_os_family == 'Debian'
 
