@@ -31,6 +31,7 @@
   run_once: true
 
 - name: create docker plugins dir
+  sudo: yes
   file:
     path: "/run/docker/plugins"
     state: directory
