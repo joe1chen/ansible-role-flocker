@@ -7,7 +7,7 @@
   sudo: yes
 
 - name: create the plugin certs on the local machine
-  shell: "flocker-ca create-api-certificate --outputpath={{ flocker_local_tempdir }}/{{ inventory_hostname }}/ plugin"
+  shell: "flocker-ca create-api-certificate --outputpath={{ flocker_local_tempdir }}/ {{ inventory_hostname }}-plugin"
   args:
     chdir: "{{ flocker_local_tempdir }}"
   delegate_to: 127.0.0.1
@@ -16,7 +16,7 @@
   copy:
     src: "{{ item }}"
     dest: /etc/flocker/plugin.crt
-  with_fileglob: "{{ flocker_local_tempdir }}/{{ inventory_hostname }}/plugin.crt"
+  with_fileglob: "{{ flocker_local_tempdir }}/{{ inventory_hostname }}-plugin.crt"
   sudo: yes
 
 - name: copy the plugin key to the correct agent node
@@ -24,5 +24,5 @@
     src: "{{ item }}"
     dest: /etc/flocker/plugin.key
     mode: 0600
-  with_fileglob: "{{ flocker_local_tempdir }}/{{ inventory_hostname }}/plugin.key"
+  with_fileglob: "{{ flocker_local_tempdir }}/{{ inventory_hostname }}-plugin.key"
   sudo: yes
