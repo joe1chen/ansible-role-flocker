@@ -17,7 +17,7 @@
   sudo: yes
 
 - name: create the plugin certs on the local machine
-  shell: "flocker-ca create-api-certificate plugin --outputpath={{ flocker_local_tempdir }}-plugins/{{ inventory_hostname }}/"
+  shell: "flocker-ca create-api-certificate --outputpath={{ flocker_local_tempdir }}-plugins/{{ inventory_hostname }}/ plugin"
   args:
     chdir: "{{ flocker_local_tempdir }}-plugins"
   delegate_to: 127.0.0.1
