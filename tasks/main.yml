@@ -20,15 +20,6 @@
   fail: msg="you must install flocker on the ansible host system. See https\://docs.clusterhq.com/en/latest/flocker-standalone/install-client.html"
   when: "flocker_ca_output.rc != 0"
   delegate_to: 127.0.0.1
-  
-- include: debian_install.yml
-  when: ansible_os_family == 'Debian'
-
-- include: centos_install.yml
-  when: ansible_os_family == 'RedHat'
-
-- include: coreos_install.yml
-  when: ansible_lsb.id == 'CoreOS'
 
 - name: remove old /tmp/<clustername>
   command: rm -rf "{{ flocker_local_tempdir }}"
@@ -45,6 +36,15 @@
     state: directory
     mode: 0700
   sudo: yes
+
+- include: debian_install.yml
+  when: ansible_os_family == 'Debian'
+
+- include: centos_install.yml
+  when: ansible_os_family == 'RedHat'
+
+- include: coreos_install.yml
+  when: ansible_lsb.id == 'CoreOS'
 
 - include: configure_control_service.yml
   when: "'{{ flocker_control_service_groupname }}' in group_names"
