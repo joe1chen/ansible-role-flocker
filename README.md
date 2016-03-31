@@ -20,6 +20,10 @@ Similar to flocker_control_service_groupname but represents the groupname of the
 
     flocker_agent_yml_path: ""
 
+Alternatively, on AWS, you can use the bundled flocker-agent.yml template.  You don't need to set flocker_agent_yml_path, but you do need to set the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY environment variables on the host.
+
+    flocker_agent_backend: 'aws'
+
 The absolute path to an agent.yml file on the local ansible machine. For more information on creating agent.yml refer to Configuring the Nodes and Storage Backends https://docs.clusterhq.com/en/latest/flocker-standalone/configuring-nodes-storage.html
 
     flocker_cluster_name: my_flocker_cluster

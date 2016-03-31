@@ -17,10 +17,21 @@
     - node.key
   sudo: yes
 
+- name: gather ec2 facts for agent.yml template (aws)
+  action: ec2_facts
+  when: flocker_agent_backend == 'aws'
+
+- name: copy agent.yml to the node via template (aws)
+  sudo: yes
+  template:
+    src: aws/flocker-agent.yml.j2
+    dest: /etc/flocker/agent.yml
+  when: flocker_agent_backend == 'aws'
+
 - name: copy agent.yml to the node
   copy: src={{ flocker_agent_yml_path }} dest=/etc/flocker/agent.yml owner=root
   sudo: yes
-  when: not (flocker_agent_yml_path is undefined or flocker_agent_yml_path is none or flocker_agent_yml_path | trim == '')
+  when: (flocker_agent_backend is undefined or flocker_agent_backend is none or flocker_agent_backend | trim == '') and not (flocker_agent_yml_path is undefined or flocker_agent_yml_path is none or flocker_agent_yml_path | trim == '')
 
 - name: create the node certs on the local machine
   shell: "flocker-ca create-node-certificate --outputpath={{ flocker_local_tempdir }}/{{ inventory_hostname }}/"

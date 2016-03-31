@@ -1,0 +1,14 @@
+"version": 1
+"control-service":
+   "hostname": "{{ hostvars[groups[flocker_control_service_groupname][0]].ansible_default_ipv4.address }}"
+   "port": 4524
+
+# The dataset key below selects and configures a dataset backend (see below: aws/openstack/etc).
+# All nodes will be configured to use only one backend
+
+dataset:
+   backend: "aws"
+   region: "{{ ansible_ec2_placement_region }}"
+   zone: "{{ ansible_ec2_placement_availability_zone }}"
+   access_key_id: "{{ lookup('env','AWS_ACCESS_KEY_ID') }}"
+   secret_access_key: "{{ lookup('env','AWS_SECRET_ACCESS_KEY') }}"
