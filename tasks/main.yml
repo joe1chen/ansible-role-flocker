@@ -7,9 +7,6 @@
 - name: "Assert that host groups are named correctly. If this fails, update *_groupnames from defaults/main.yml"
   assert: { that: "'{{ flocker_control_service_groupname }}' in group_names or '{{ flocker_agents_groupname }}' in group_names" }
 
-- name: "Assert that the user has set flocker_agent_yml_path"
-  assert: { that: "flocker_agent_yml_path != '' "  }
-
 - name: "See if flocker-ca is installed on the host system"
   command: which flocker-ca
   register: flocker_ca_output
