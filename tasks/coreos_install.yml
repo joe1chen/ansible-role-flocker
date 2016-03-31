@@ -3,7 +3,7 @@
   sudo: yes
   template:
     src: flocker-container-agent.service.j2
-    dest: /etc/systemd/flocker-container-agent.service
+    dest: /etc/systemd/system/flocker-container-agent.service
   notify:
     - reload systemd
     - restart flocker-container-agent
@@ -13,7 +13,7 @@
   sudo: yes
   template:
     src: flocker-dataset-agent.service.j2
-    dest: /etc/systemd/flocker-dataset-agent.service
+    dest: /etc/systemd/system/flocker-dataset-agent.service
   notify:
     - reload systemd
     - restart flocker-dataset-agent
@@ -23,7 +23,7 @@
   sudo: yes
   template:
     src: flocker-control.service.j2
-    dest: /etc/systemd/flocker-control.service
+    dest: /etc/systemd/system/flocker-control.service
   notify:
     - reload systemd
     - restart flocker-control
@@ -45,7 +45,7 @@
   sudo: yes
   template:
     src: flocker-docker-plugin.service.j2
-    dest: /etc/systemd/flocker-docker-plugin.service
+    dest: /etc/systemd/system/flocker-docker-plugin.service
   notify:
     - reload systemd
     - restart flocker-docker-plugin
