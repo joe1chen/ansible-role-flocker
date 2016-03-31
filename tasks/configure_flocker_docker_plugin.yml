@@ -1,9 +1,6 @@
 ---
 - name: remove old certs
-  file: path="/etc/flocker/{{ item }}" state=absent
-  with_items:
-    - plugin.crt
-    - plugin.key
+  command: rm /etc/flocker/plugin.*
   sudo: yes
 
 - name: create the plugin certs on the local machine
