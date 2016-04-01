@@ -1,4 +1,8 @@
 ---
+- name: remove old /tmp/<clustername>/<node>
+  command: rm -rf "{{ flocker_local_tempdir }}/{{ inventory_hostname }}"
+  delegate_to: 127.0.0.1
+
 - name: create the directories to hold the agent certs
   file:
     path: "{{ flocker_local_tempdir }}/{{ inventory_hostname }}"
