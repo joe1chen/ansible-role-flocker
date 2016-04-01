@@ -1,13 +1,20 @@
 ---
+- name: "check if agent certs exist"
+  stat: "path={{ flocker_local_tempdir }}/{{ inventory_hostname }}-node.crt"
+  delegate_to: 127.0.0.1
+  register: agent_crt
+
 - name: remove old /tmp/<clustername>/<node>
   command: rm -rf "{{ flocker_local_tempdir }}/{{ inventory_hostname }}"
   delegate_to: 127.0.0.1
+  when: agent_crt.stat.exists == False
 
 - name: create the directories to hold the agent certs
   file:
     path: "{{ flocker_local_tempdir }}/{{ inventory_hostname }}"
     state: directory
   delegate_to: 127.0.0.1
+  when: agent_crt.stat.exists == False
 
 - name: gather ec2 facts for agent.yml template (aws)
   action: ec2_facts
@@ -30,6 +37,7 @@
   args:
     chdir: "{{ flocker_local_tempdir }}"
   delegate_to: 127.0.0.1
+  when: agent_crt.stat.exists == False
 
 - name: copy cluster.crt to the node
   copy:
@@ -37,11 +45,27 @@
     dest: /etc/flocker/cluster.crt
   sudo: yes
 
-- name: copy the node cert to the correct agent node
+- name: rename the node cert
   copy:
     src: "{{ item }}"
-    dest: /etc/flocker/node.crt
+    dest: {{ flocker_local_tempdir }}/{{ inventory_hostname }}-node.crt
   with_fileglob: "{{ flocker_local_tempdir }}/{{ inventory_hostname }}/*.crt"
+  delegate_to: 127.0.0.1
+  when: agent_crt.stat.exists == False
+
+- name: rename the node key
+  copy:
+    src: "{{ item }}"
+    dest: "{{ flocker_local_tempdir }}/{{ inventory_hostname }}-node.key"
+    mode: 0600
+  with_fileglob: "{{ flocker_local_tempdir }}/{{ inventory_hostname }}/*.key"
+  delegate_to: 127.0.0.1
+  when: agent_crt.stat.exists == False
+
+- name: copy the node cert to the correct agent node
+  copy:
+    src: "{{ flocker_local_tempdir }}/{{ inventory_hostname }}-node.crt"
+    dest: /etc/flocker/node.crt
   sudo: yes
   notify:
     - restart flocker-dataset-agent
@@ -49,10 +73,9 @@
 
 - name: copy the key to the correct agent node
   copy:
-    src: "{{ item }}"
+    src: "{{ flocker_local_tempdir }}/{{ inventory_hostname }}-node.key"
     dest: /etc/flocker/node.key
     mode: 0600
-  with_fileglob: "{{ flocker_local_tempdir }}/{{ inventory_hostname }}/*.key"
   sudo: yes
   notify:
     - restart flocker-dataset-agent
