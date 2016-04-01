@@ -1,5 +1,5 @@
 ---
-- name: "check if {{ flocker_local_tempdir }}/{{ inventory_hostname }}-plugin.crt exists"
+- name: "check if plugin certs exist"
   stat: "path={{ flocker_local_tempdir }}/{{ inventory_hostname }}-plugin.crt"
   register: plugin_crt
 
