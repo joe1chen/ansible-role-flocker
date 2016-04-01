@@ -1,13 +1,13 @@
 ---
-- name: remove old certs
-  command: rm -f /etc/flocker/plugin.*
-  sudo: yes
+- stat: path={{ flocker_local_tempdir }}/{{ inventory_hostname }}-plugin.crt
+  register: plugin_crt
 
 - name: create the plugin certs on the local machine
-  shell: "flocker-ca create-api-certificate --outputpath={{ flocker_local_tempdir }}/ {{ inventory_hostname }}-plugin"
+  shell: "flocker-ca create-api-certificate {{ inventory_hostname }}-plugin"
   args:
     chdir: "{{ flocker_local_tempdir }}"
   delegate_to: 127.0.0.1
+  when: plugin_crt.stat.exists == False
 
 - name: copy the plugin cert to the correct agent node
   copy:
