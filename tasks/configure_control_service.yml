@@ -1,6 +1,15 @@
 ---
 - assert: { that: "ansible_os_family | match('Debian') or ansible_os_family | match('RedHat') or ansible_lsb.id == 'CoreOS'" }
 
+- stat: path=/tmp/{{ flocker_cluster_name }}/cluster.crt
+  register: cluster_crt
+
+- stat: path=/tmp/{{ flocker_cluster_name }}/control-{{ inventory_hostname }}.key
+  register: control_crt
+
+- stat: path=/tmp/{{ flocker_cluster_name }}/{{ flocker_api_cert_name }}.key
+  register: api_crt
+
 - name: create /tmp/<clustername>
   file:
     path: "{{ flocker_local_tempdir }}"
@@ -12,18 +21,21 @@
   args:
     chdir: "{{ flocker_local_tempdir }}"
   delegate_to: 127.0.0.1
+  when: cluster_crt.stat.exists == False
 
 - name: flocker-ca create-control-certificate
   shell: "flocker-ca create-control-certificate {{ inventory_hostname }}"
   args:
     chdir: "{{ flocker_local_tempdir }}"
   delegate_to: 127.0.0.1
+  when: control_crt.stat.exists == False
 
 - name: create API cert
   shell: "flocker-ca create-api-certificate {{ flocker_api_cert_name }}"
   args:
     chdir: "{{ flocker_local_tempdir }}"
   delegate_to: 127.0.0.1
+  when: api_crt.stat.exists == False
 
 - name: copy API cert.crt to the control node
   copy:
