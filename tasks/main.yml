@@ -21,11 +21,6 @@
   when: "flocker_ca_output.rc != 0"
   delegate_to: 127.0.0.1
 
-- name: remove old /tmp/<clustername>
-  command: rm -rf "{{ flocker_local_tempdir }}"
-  delegate_to: 127.0.0.1
-  when: "'{{ flocker_control_service_groupname }}' in group_names"
-
 - name: remove old /etc/flocker on the node
   command: rm -rf /etc/flocker
   sudo: yes

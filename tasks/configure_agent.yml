@@ -1,8 +1,4 @@
 ---
-- name: remove old /tmp/<clustername>/<node>
-  command: rm -rf "{{ flocker_local_tempdir }}/{{ inventory_hostname }}"
-  delegate_to: 127.0.0.1
-
 - name: remove old certs
   file: path="/etc/flocker/{{ item }}" state=absent
   with_items:
