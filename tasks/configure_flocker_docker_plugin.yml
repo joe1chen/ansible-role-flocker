@@ -1,5 +1,6 @@
 ---
-- stat: "path={{ flocker_local_tempdir }}/{{ inventory_hostname }}-plugin.crt"
+- name: "check if {{ flocker_local_tempdir }}/{{ inventory_hostname }}-plugin.crt exists"
+  stat: "path={{ flocker_local_tempdir }}/{{ inventory_hostname }}-plugin.crt"
   register: plugin_crt
 
 - name: create the plugin certs on the local machine
