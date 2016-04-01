@@ -1,11 +1,9 @@
 ---
-- name: remove old certs
-  file: path="/etc/flocker/{{ item }}" state=absent
-  with_items:
-    - cluster.crt
-    - node.crt
-    - node.key
-  sudo: yes
+- name: create the directories to hold the agent certs
+  file:
+    path: "{{ flocker_local_tempdir }}/{{ inventory_hostname }}"
+    state: directory
+  delegate_to: 127.0.0.1
 
 - name: gather ec2 facts for agent.yml template (aws)
   action: ec2_facts
