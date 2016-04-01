@@ -48,7 +48,7 @@
 - name: rename the node cert
   copy:
     src: "{{ item }}"
-    dest: {{ flocker_local_tempdir }}/{{ inventory_hostname }}-node.crt
+    dest: "{{ flocker_local_tempdir }}/{{ inventory_hostname }}-node.crt"
   with_fileglob: "{{ flocker_local_tempdir }}/{{ inventory_hostname }}/*.crt"
   delegate_to: 127.0.0.1
   when: agent_crt.stat.exists == False
