@@ -21,10 +21,6 @@
   when: "flocker_ca_output.rc != 0"
   delegate_to: 127.0.0.1
 
-- name: remove old /etc/flocker on the node
-  command: rm -rf /etc/flocker
-  sudo: yes
-
 - name: create /etc/flocker on the node
   file:
     path: /etc/flocker
