@@ -1,13 +1,13 @@
 ---
 - assert: { that: "ansible_os_family | match('Debian') or ansible_os_family | match('RedHat') or ansible_lsb.id == 'CoreOS'" }
 
-- stat: path={{ flocker_local_tempdir }}/cluster.crt
+- stat: "path={{ flocker_local_tempdir }}/cluster.crt"
   register: cluster_crt
 
-- stat: path={{ flocker_local_tempdir }}/control-{{ inventory_hostname }}.key
+- stat: "path={{ flocker_local_tempdir }}/control-{{ inventory_hostname }}.key"
   register: control_crt
 
-- stat: path={{ flocker_local_tempdir }}/{{ flocker_api_cert_name }}.key
+- stat: "path={{ flocker_local_tempdir }}/{{ flocker_api_cert_name }}.key"
   register: api_crt
 
 - name: create /tmp/<clustername>
