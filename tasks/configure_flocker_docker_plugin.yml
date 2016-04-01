@@ -1,6 +1,7 @@
 ---
 - name: "check if plugin certs exist"
   stat: "path={{ flocker_local_tempdir }}/{{ inventory_hostname }}-plugin.crt"
+  delegate_to: 127.0.0.1
   register: plugin_crt
 
 - name: create the plugin certs on the local machine
