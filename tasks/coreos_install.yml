@@ -8,6 +8,7 @@
   when: "'{{ flocker_agents_groupname }}' in group_names"
 
 - name: restart flocker-container-agent
+  sudo: yes
   notify:
     - reload systemd
     - restart flocker-container-agent
@@ -22,6 +23,7 @@
   when: "'{{ flocker_agents_groupname }}' in group_names"
 
 - name: restart flocker-dataset-agent
+  sudo: yes
   notify:
     - reload systemd
     - restart flocker-dataset-agent
@@ -37,6 +39,7 @@
   run_once: true
 
 - name: restart flocker-control
+  sudo: yes
   notify:
     - reload systemd
     - restart flocker-control
@@ -60,6 +63,7 @@
   when: "flocker_install_docker_plugin and '{{ flocker_agents_groupname }}' in group_names"
 
 - name: restart flocker-docker-plugin
+  sudo: yes
   notify:
     - reload systemd
     - restart flocker-docker-plugin
