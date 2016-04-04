@@ -67,6 +67,11 @@
     src: "{{ flocker_local_tempdir }}/{{ inventory_hostname }}-node.crt"
     dest: /etc/flocker/node.crt
   sudo: yes
+  register: node_cert
+
+- name: restart after node cert changed
+  sudo: yes
+  when: node_cert.changed
   notify:
     - restart flocker-dataset-agent
     - restart flocker-container-agent
@@ -77,6 +82,11 @@
     dest: /etc/flocker/node.key
     mode: 0600
   sudo: yes
+  register: key_changed
+
+- name: restart after key changed
+  sudo: yes
+  when: key_changed.changed
   notify:
     - restart flocker-dataset-agent
     - restart flocker-container-agent
