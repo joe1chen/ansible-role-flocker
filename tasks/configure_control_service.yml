@@ -83,10 +83,16 @@
   copy:
     src: "{{ flocker_local_tempdir }}/control-{{ inventory_hostname }}.crt"
     dest: /etc/flocker/control-service.crt
-  notify:
-    - restart flocker-control
   sudo: yes
   run_once: true
+  register: control_cert
+
+- name: restart flocker-control after control cert changed
+  sudo: yes
+  notify:
+    - restart flocker-control
+  run_once: true
+  when: control_cert.changed
 
 - name: Flocker Control API port
   lineinfile:
