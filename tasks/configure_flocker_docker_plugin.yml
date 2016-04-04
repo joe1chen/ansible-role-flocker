@@ -16,6 +16,13 @@
     src: "{{ item }}"
     dest: /etc/flocker/plugin.crt
   with_fileglob: "{{ flocker_local_tempdir }}/{{ inventory_hostname }}-plugin.crt"
+  register: plugin_cert
+  sudo: yes
+
+- name: restart flocker docker plugin after plugin cert change
+  when: plugin_cert.changed
+  notify:
+    - restart flocker-docker-plugin
   sudo: yes
 
 - name: copy the plugin key to the correct agent node
@@ -24,6 +31,11 @@
     dest: /etc/flocker/plugin.key
     mode: 0600
   with_fileglob: "{{ flocker_local_tempdir }}/{{ inventory_hostname }}-plugin.key"
+  register: plugin_key
+  sudo: yes
+
+- name: restart flocker docker plugin after plugin key change
+  when: plugin_key.changed
   notify:
     - restart flocker-docker-plugin
   sudo: yes
