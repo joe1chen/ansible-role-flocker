@@ -15,6 +15,14 @@
     - restart flocker-container-agent
   when: "'{{ flocker_agents_groupname }}' in group_names and flocker_container_agent_service.changed"
 
+- name: ensure flocker-container-agent is running (and enable it at boot)
+  become: yes
+  service:
+    name: flocker-container-agent
+    state: started
+    enabled: yes
+  when: "'{{ flocker_agents_groupname }}' in group_names"
+
 - name: install flocker-dataset-agent
   sudo: yes
   template:
@@ -30,6 +38,14 @@
     - reload systemd
     - restart flocker-dataset-agent
   when: "'{{ flocker_agents_groupname }}' in group_names and flocker_dataset_agent_service.changed"
+
+- name: ensure flocker-dataset-agent is running (and enable it at boot)
+  become: yes
+  service:
+    name: flocker-dataset-agent
+    state: started
+    enabled: yes
+  when: "'{{ flocker_agents_groupname }}' in group_names"
 
 - name: install flocker-control
   sudo: yes
@@ -47,6 +63,15 @@
     - reload systemd
     - restart flocker-control
   when: "'{{ flocker_control_service_groupname }}' in group_names and flocker_control.changed"
+  run_once: true
+
+- name: ensure flocker-control is running (and enable it at boot)
+  become: yes
+  service:
+    name: flocker-control
+    state: started
+    enabled: yes
+  when: "'{{ flocker_control_service_groupname }}' in group_names"
   run_once: true
 
 - name: create docker plugins dir
@@ -72,3 +97,11 @@
     - reload systemd
     - restart flocker-docker-plugin
   when: "flocker_install_docker_plugin and '{{ flocker_agents_groupname }}' in group_names and flocker_docker_plugin.changed"
+
+- name: ensure flocker-docker-plugin is running (and enable it at boot)
+  become: yes
+  service:
+    name: flocker-docker-plugin
+    state: started
+    enabled: yes
+  when: "flocker_install_docker_plugin and '{{ flocker_agents_groupname }}' in group_names"
