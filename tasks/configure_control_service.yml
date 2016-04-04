@@ -88,6 +88,7 @@
   register: control_cert
 
 - name: restart flocker-control after control cert changed
+  debug: msg="Restart flocker-control after control cert changed"
   sudo: yes
   notify:
     - restart flocker-control

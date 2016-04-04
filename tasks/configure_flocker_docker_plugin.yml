@@ -20,6 +20,7 @@
   sudo: yes
 
 - name: restart flocker docker plugin after plugin cert change
+  debug: msg="Restart flocker docker plugin after plugin cert change"
   when: plugin_cert.changed
   notify:
     - restart flocker-docker-plugin
@@ -35,6 +36,7 @@
   sudo: yes
 
 - name: restart flocker docker plugin after plugin key change
+  debug: msg="Restart flocker docker plugin after plugin key change"
   when: plugin_key.changed
   notify:
     - restart flocker-docker-plugin

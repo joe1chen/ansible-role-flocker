@@ -70,6 +70,7 @@
   register: node_cert
 
 - name: restart after node cert changed
+  debug: msg="Restart after node cert changed"
   sudo: yes
   when: node_cert.changed
   notify:
@@ -85,6 +86,7 @@
   register: key_changed
 
 - name: restart after key changed
+  debug: msg="Restart after key changed"
   sudo: yes
   when: key_changed.changed
   notify:
