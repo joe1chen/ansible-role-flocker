@@ -4,30 +4,43 @@
   template:
     src: flocker-container-agent.service.j2
     dest: /etc/systemd/system/flocker-container-agent.service
+  register: flocker_container_agent_service
+  when: "'{{ flocker_agents_groupname }}' in group_names"
+
+- name: restart flocker-container-agent
   notify:
     - reload systemd
     - restart flocker-container-agent
-  when: "'{{ flocker_agents_groupname }}' in group_names"
+  when: "'{{ flocker_agents_groupname }}' in group_names and flocker_container_agent_service.changed"
 
 - name: install flocker-dataset-agent
   sudo: yes
   template:
     src: flocker-dataset-agent.service.j2
     dest: /etc/systemd/system/flocker-dataset-agent.service
+  register: flocker_dataset_agent_service
+  when: "'{{ flocker_agents_groupname }}' in group_names"
+
+- name: restart flocker-dataset-agent
   notify:
     - reload systemd
     - restart flocker-dataset-agent
-  when: "'{{ flocker_agents_groupname }}' in group_names"
+  when: "'{{ flocker_agents_groupname }}' in group_names and flocker_dataset_agent_service.changed"
 
 - name: install flocker-control
   sudo: yes
   template:
     src: flocker-control.service.j2
     dest: /etc/systemd/system/flocker-control.service
+  register: flocker_control
+  when: "'{{ flocker_control_service_groupname }}' in group_names"
+  run_once: true
+
+- name: restart flocker-control
   notify:
     - reload systemd
     - restart flocker-control
-  when: "'{{ flocker_control_service_groupname }}' in group_names"
+  when: "'{{ flocker_control_service_groupname }}' in group_names and flocker_control.changed"
   run_once: true
 
 - name: create docker plugins dir
@@ -43,8 +56,11 @@
   template:
     src: flocker-docker-plugin.service.j2
     dest: /etc/systemd/system/flocker-docker-plugin.service
+  register: flocker_docker_plugin
+  when: "flocker_install_docker_plugin and '{{ flocker_agents_groupname }}' in group_names"
+
+- name: restart flocker-docker-plugin
   notify:
     - reload systemd
     - restart flocker-docker-plugin
-  when: "flocker_install_docker_plugin and '{{ flocker_agents_groupname }}' in group_names"
-
+  when: "flocker_install_docker_plugin and '{{ flocker_agents_groupname }}' in group_names and flocker_docker_plugin.changed"
