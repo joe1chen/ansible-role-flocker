@@ -7,7 +7,7 @@ After=docker.service
 ExecStartPre=-/usr/bin/docker kill flocker-dataset-agent
 ExecStartPre=-/usr/bin/docker rm flocker-dataset-agent
 ExecStartPre=/usr/bin/docker pull clusterhq/flocker-dataset-agent
-ExecStart=/usr/bin/docker run --privileged=true --name flocker-dataset-agent --net=host -v /tmp/flocker-command-log:/tmp/flocker-command-log -v /flocker:/flocker -v /:/host -v /etc/flocker:/etc/flocker -v /dev:/dev clusterhq/flocker-dataset-agent
+ExecStart=/usr/bin/docker run --privileged=true --name flocker-dataset-agent -e DEBUG=1 --net=host -v /tmp/flocker-command-log:/tmp/flocker-command-log -v /flocker:/flocker -v /:/host -v /etc/flocker:/etc/flocker -v /dev:/dev clusterhq/flocker-dataset-agent
 ExecStop=/usr/bin/docker stop flocker-dataset-agent
 Restart=on-failure
 TimeoutStartSec=0
